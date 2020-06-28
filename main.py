@@ -54,7 +54,8 @@ if __name__ == "__main__":
                                level=logging.DEBUG)
     num_hlls = 8
     logging.info(f"Creating {num_hlls} HLLs...")
-    hlls = [HyperLogLogEventCounter(0.005, f"HLL-{i}") for i in range(num_hlls)]
+    hlls = [HyperLogLogEventCounter(0.005, f"HLL-{i}")
+            for i in range(num_hlls)]
     processes = [mp.Process(target=fill_hll, args=(hll, 500000),
                             daemon=True,
                             name=f"Process for {hll.name}")
