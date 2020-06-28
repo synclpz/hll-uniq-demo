@@ -9,7 +9,6 @@ class HyperLogLogEventCounter(HyperLogLog):
     """
     HyperLogLog cardinality counter with event counter
     """
-
     def __init__(self, error_rate, name):
         """
         Create a HyperLogLog with event counter
@@ -42,24 +41,31 @@ def add_print100000(hll: HyperLogLogEventCounter, value):
 
 
 def fill_hll(hll: HyperLogLogEventCounter, max_count):
-    [add_print100000(hll, "".join(
-                     [digits[randint(0, len(digits) - 1)] for n in range(5)]
-                     )) for m in range(max_count)]
+    [
+        add_print100000(
+            hll,
+            "".join([digits[randint(0,
+                                    len(digits) - 1)] for n in range(4)]))
+        for m in range(max_count)
+    ]
 
 
 if __name__ == "__main__":
     logging.basicConfig(format="%(asctime)s %(levelname)s"
-                               " [%(module)s/%(funcName)s]"
-                               " (%(processName)s) %(message)s",
-                               level=logging.DEBUG)
+                        " [%(module)s/%(funcName)s]"
+                        " (%(processName)s) %(message)s",
+                        level=logging.DEBUG)
     num_hlls = 8
     logging.info(f"Creating {num_hlls} HLLs...")
-    hlls = [HyperLogLogEventCounter(0.005, f"HLL-{i}")
-            for i in range(num_hlls)]
-    processes = [mp.Process(target=fill_hll, args=(hll, 500000),
-                            daemon=True,
-                            name=f"Process for {hll.name}")
-                 for hll in hlls]
+    hlls = [
+        HyperLogLogEventCounter(0.005, f"HLL-{i}") for i in range(num_hlls)
+    ]
+    processes = [
+        mp.Process(target=fill_hll,
+                   args=(hll, 500000),
+                   daemon=True,
+                   name=f"Process for {hll.name}") for hll in hlls
+    ]
     logging.info("Starting processes...")
     [process.start() for process in processes]
     [process.join() for process in processes]
