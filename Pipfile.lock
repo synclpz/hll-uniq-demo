@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7940efeb16c80fbdabf312158555854b23382b690c112a8b3777c2a830498bfb"
+            "sha256": "52e084d1e982e054bd1538b25c46cf0f264690b755aa322f1b524457665b3014"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,12 +16,54 @@
         ]
     },
     "default": {
+        "dill": {
+            "hashes": [
+                "sha256:6e12da0d8e49c220e8d6e97ee8882002e624f1160289ce85ec2cc0a5246b3a2e"
+            ],
+            "markers": "python_version >= '2.6' and python_version != '3.0'",
+            "version": "==0.3.2"
+        },
         "hyperloglog": {
             "hashes": [
                 "sha256:52abf9e84ea1a2a79580a85f72af11c46a1bc8d359681a1301c34358b929c5a7"
             ],
             "index": "pypi",
             "version": "==0.0.12"
+        },
+        "multiprocess": {
+            "hashes": [
+                "sha256:81f388527a0c8766e94fe084fd8a408da5045a9fe7b28e199f684a796f3c6bf8",
+                "sha256:879ee48882bf7959102010058f30419d72abc90035de70b7259a386dc8b1946a",
+                "sha256:9e604ac3ff7d6aa7da8306e7dd3a76a8b6ba83f5a8a2d8590b2edd1468df6479"
+            ],
+            "version": "==0.70.10"
+        },
+        "pathos": {
+            "hashes": [
+                "sha256:51b48e54870e4f83a262e49b6369116ab2ecc5a217569a84c7ab726e27b1bc10"
+            ],
+            "index": "pypi",
+            "version": "==0.2.6"
+        },
+        "pox": {
+            "hashes": [
+                "sha256:621f3a912531d0c5c71f7d5fd4815b15bf5d0db5b4cea352df14f2ff6bc7c615"
+            ],
+            "version": "==0.2.8"
+        },
+        "ppft": {
+            "hashes": [
+                "sha256:cd1e39129fc9cbd4a877b1ff4fc5018051183c11bc9c9c0922efad80c57174f6"
+            ],
+            "version": "==1.6.6.2"
+        },
+        "six": {
+            "hashes": [
+                "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259",
+                "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"
+            ],
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "version": "==1.15.0"
         }
     },
     "develop": {}

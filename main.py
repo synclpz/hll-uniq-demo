@@ -1,8 +1,11 @@
-from hyperloglog import HyperLogLog
+import logging as log
+import dill
+import pickle
 from random import randint
-from string import digits
-import logging
-import multiprocessing as mp
+from string import ascii_letters
+
+from hyperloglog import HyperLogLog
+from pathos.multiprocessing import ProcessingPool as Pool
 
 
 class HyperLogLogEventCounter(HyperLogLog):
@@ -17,9 +20,9 @@ class HyperLogLogEventCounter(HyperLogLog):
         error_rate -- desired maximum error rate
         name -- object name for reference
         """
-        super(HyperLogLogEventCounter, self).__init__(error_rate)
         self.count = 0
         self.name = name
+        super(HyperLogLogEventCounter, self).__init__(error_rate)
 
     def add(self, value):
         """
@@ -35,38 +38,52 @@ def add_print100000(hll: HyperLogLogEventCounter, value):
     """
     hll.add(value)
     if not hll.count % 100000:
-        logging.debug(f"Count: {hll.count}, "
-                      f"current value: {value}, "
-                      f"cardinality: {len(hll)}")
+        log.debug(f"Count: {hll.count}, "
+                  f"current value: {value}, "
+                  f"cardinality: {len(hll)}")
 
 
-def fill_hll(hll: HyperLogLogEventCounter, max_count):
+def fill_hll(hll: HyperLogLogEventCounter, max_count, size):
     [
         add_print100000(
-            hll,
-            "".join([digits[randint(0,
-                                    len(digits) - 1)] for n in range(4)]))
-        for m in range(max_count)
+            hll, "".join([
+                ascii_letters[randint(0,
+                                      len(ascii_letters) - 1)]
+                for n in range(size)
+            ])) for m in range(max_count)
     ]
 
 
 if __name__ == "__main__":
-    logging.basicConfig(format="%(asctime)s %(levelname)s"
-                        " [%(module)s/%(funcName)s]"
-                        " (%(processName)s) %(message)s",
-                        level=logging.DEBUG)
-    num_hlls = 8
-    logging.info(f"Creating {num_hlls} HLLs...")
+    log.basicConfig(format="%(asctime)s %(levelname)s"
+                    " [%(module)s/%(funcName)s]"
+                    " (%(processName)s) %(message)s",
+                    level=log.DEBUG)
+    num_processes = 1
+    num_hlls = 1
+    num_events = 500000
+    record_size = 3
+
+    pool = Pool(num_processes)
+
+    log.info(f"Creating {num_hlls} HLLs...")
     hlls = [
         HyperLogLogEventCounter(0.005, f"HLL-{i}") for i in range(num_hlls)
     ]
-    processes = [
-        mp.Process(target=fill_hll,
-                   args=(hll, 500000),
-                   daemon=True,
-                   name=f"Process for {hll.name}") for hll in hlls
-    ]
-    logging.info("Starting processes...")
-    [process.start() for process in processes]
-    [process.join() for process in processes]
-    logging.info("Done")
+
+    print(type(hlls[0]))
+    dump = dill.dumps(hlls[0])
+    p_dump = pickle.dumps(hlls[0])
+    hll_deser = dill.loads(dump)
+    p_hll_deser = pickle.loads(p_dump)
+    print(type(hll_deser))
+    print(type(p_hll_deser))
+
+    #дальше не смотри
+
+    #log.info("Starting processes...")
+    #with pool:
+    #    pool.map(fill_hll, [hll for hll in hlls], [num_events] * len(hlls),
+    #             [record_size] * len(hlls))
+
+    #log.info("Done")
