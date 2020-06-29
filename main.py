@@ -79,11 +79,9 @@ if __name__ == "__main__":
     print(type(hll_deser))
     print(type(p_hll_deser))
 
-    #дальше не смотри
+    log.info("Starting processes...")
+    with pool:
+        pool.map(fill_hll, [hll for hll in hlls], [num_events] * len(hlls),
+                 [record_size] * len(hlls))
 
-    #log.info("Starting processes...")
-    #with pool:
-    #    pool.map(fill_hll, [hll for hll in hlls], [num_events] * len(hlls),
-    #             [record_size] * len(hlls))
-
-    #log.info("Done")
+    log.info("Done")
