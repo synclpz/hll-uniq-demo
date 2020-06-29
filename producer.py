@@ -13,13 +13,19 @@ if __name__ == "__main__":
                     level=log.INFO)
     size = 10
     message_count = 10000
-    days_count = 100
+    days_count = 30
     bootstrap_servers = "localhost:9092"
     topic_name = "requests"
 
-    producer = KafkaProducer(
-        bootstrap_servers=bootstrap_servers,
-        value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+    while True:
+        try:
+            producer = KafkaProducer(
+                bootstrap_servers=bootstrap_servers,
+                value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+            break
+        except Exception:
+            log.info("Waiting for Kafka...")
+            time.sleep(5)
     [
         producer.send(
             topic_name, {
