@@ -1,4 +1,3 @@
-import logging as log
 import pickle
 
 from hyperloglog import HyperLogLog
@@ -29,11 +28,6 @@ class HyperLogLogEventCounter(HyperLogLog):
 
 
 if __name__ == "__main__":
-    log.basicConfig(format="%(asctime)s %(levelname)s"
-                    " [%(module)s/%(funcName)s]"
-                    " (%(processName)s) %(message)s",
-                    level=log.DEBUG)
-
     hll = HyperLogLogEventCounter(0.005, f"HLL-0")
 
     print(type(hll))
