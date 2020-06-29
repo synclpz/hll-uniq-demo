@@ -11,12 +11,12 @@ services:
     expose:
       - "9093"
     environment:
-        KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
-        KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-        KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
-        KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-        KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-        KAFKA_CREATE_TOPICS: "requests:1:1"
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "requests:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - .data/kafka:/kafka
@@ -31,4 +31,15 @@ services:
         hard: 262144
     volumes:
       - .data/clickhouse-server:/var/lib/clickhouse
-      - .data/clickhouse-init:/docker-entrypoint-initdb.d
+      - ./clickhouse:/docker-entrypoint-initdb.d
+  grafana:
+    image: grafana/grafana
+    user: $UID:$GID
+    ports:
+      - 3000:3000
+    environment: 
+      GF_INSTALL_PLUGINS: vertamedia-clickhouse-datasource
+    volumes: 
+      - .data/grafana:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards

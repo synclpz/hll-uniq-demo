@@ -24,7 +24,7 @@ if __name__ == "__main__":
         producer.send(
             topic_name, {
                 "timestamp":
-                int(time.time() + 86400 * i),
+                int(time.time() - 86400 * i),
                 "cookie":
                 "".join([
                     ascii_letters[randint(0,
