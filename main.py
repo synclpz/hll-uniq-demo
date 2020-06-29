@@ -1,11 +1,9 @@
 import logging as log
-import dill
 import pickle
 from random import randint
 from string import ascii_letters
 
 from hyperloglog import HyperLogLog
-from pathos.multiprocessing import ProcessingPool as Pool
 
 
 class HyperLogLogEventCounter(HyperLogLog):
@@ -59,29 +57,18 @@ if __name__ == "__main__":
                     " [%(module)s/%(funcName)s]"
                     " (%(processName)s) %(message)s",
                     level=log.DEBUG)
-    num_processes = 1
     num_hlls = 1
     num_events = 500000
     record_size = 3
 
-    pool = Pool(num_processes)
+    hll = HyperLogLogEventCounter(0.005, f"HLL-0")
 
-    log.info(f"Creating {num_hlls} HLLs...")
-    hlls = [
-        HyperLogLogEventCounter(0.005, f"HLL-{i}") for i in range(num_hlls)
-    ]
-
-    print(type(hlls[0]))
-    dump = dill.dumps(hlls[0])
-    p_dump = pickle.dumps(hlls[0])
-    hll_deser = dill.loads(dump)
-    p_hll_deser = pickle.loads(p_dump)
+    print(type(hll))
+    dump = pickle.dumps(hll)
+    hll_deser = pickle.loads(dump)
     print(type(hll_deser))
-    print(type(p_hll_deser))
 
-    log.info("Starting processes...")
-    with pool:
-        pool.map(fill_hll, [hll for hll in hlls], [num_events] * len(hlls),
-                 [record_size] * len(hlls))
-
-    log.info("Done")
+    # this works fine
+    hll.add("test")
+    # this fails
+    hll_deser.add("test")
