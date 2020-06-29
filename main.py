@@ -41,5 +41,5 @@ if __name__ == "__main__":
 
     # this works fine
     hll.add("test")
-    # this fails
+    # this also works fine now
     hll_deser.add("test")
