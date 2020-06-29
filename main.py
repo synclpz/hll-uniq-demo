@@ -1,6 +1,4 @@
 import logging as log
-import dill
-import pickle
 from random import randint
 from string import ascii_letters
 
@@ -12,6 +10,9 @@ class HyperLogLogEventCounter(HyperLogLog):
     """
     HyperLogLog cardinality counter with event counter
     """
+
+    __slots__ = HyperLogLog.__slots__ + ("count", "name")
+
     def __init__(self, error_rate, name):
         """
         Create a HyperLogLog with event counter
@@ -59,8 +60,8 @@ if __name__ == "__main__":
                     " [%(module)s/%(funcName)s]"
                     " (%(processName)s) %(message)s",
                     level=log.DEBUG)
-    num_processes = 1
-    num_hlls = 1
+    num_processes = 8
+    num_hlls = 30
     num_events = 500000
     record_size = 3
 
@@ -70,14 +71,6 @@ if __name__ == "__main__":
     hlls = [
         HyperLogLogEventCounter(0.005, f"HLL-{i}") for i in range(num_hlls)
     ]
-
-    print(type(hlls[0]))
-    dump = dill.dumps(hlls[0])
-    p_dump = pickle.dumps(hlls[0])
-    hll_deser = dill.loads(dump)
-    p_hll_deser = pickle.loads(p_dump)
-    print(type(hll_deser))
-    print(type(p_hll_deser))
 
     log.info("Starting processes...")
     with pool:
