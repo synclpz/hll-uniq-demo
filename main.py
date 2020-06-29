@@ -28,8 +28,9 @@ class HyperLogLogEventCounter(HyperLogLog):
 
 
 if __name__ == "__main__":
-    hll = HyperLogLogEventCounter(0.005, f"HLL-0")
+    hll = HyperLogLogEventCounter(0.005, "HLL-0")
 
+    [hll.add(i) for i in range(10000)]  # to test "non-new" object ser/deser
     print(type(hll))
     dump = pickle.dumps(hll)
     hll_deser = pickle.loads(dump)
