@@ -1,7 +1,5 @@
 import logging as log
 import pickle
-from random import randint
-from string import ascii_letters
 
 from hyperloglog import HyperLogLog
 
