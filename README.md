@@ -23,6 +23,13 @@ Each day (one HLL state) costs ~100KB storage.
 * docker
 * docker-compose
 
+Ports should be available for docker to start services on localhost:
+* 2181
+* 9092
+* 8123
+* 9000
+* 3000
+
 ## Run
 
 From project directory run:
