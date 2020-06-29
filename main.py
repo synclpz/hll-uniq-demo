@@ -33,9 +33,6 @@ if __name__ == "__main__":
                     " [%(module)s/%(funcName)s]"
                     " (%(processName)s) %(message)s",
                     level=log.DEBUG)
-    num_hlls = 1
-    num_events = 500000
-    record_size = 3
 
     hll = HyperLogLogEventCounter(0.005, f"HLL-0")
 
