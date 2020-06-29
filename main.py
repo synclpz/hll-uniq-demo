@@ -11,7 +11,7 @@ class HyperLogLogEventCounter(HyperLogLog):
         """
         Create a HyperLogLog with event counter
 
-         Keyword arguments:
+        Keyword arguments:
         error_rate -- desired maximum error rate
         name -- object name for reference
         """
