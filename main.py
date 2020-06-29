@@ -30,28 +30,6 @@ class HyperLogLogEventCounter(HyperLogLog):
         return super(HyperLogLogEventCounter, self).add(value)
 
 
-def add_print100000(hll: HyperLogLogEventCounter, value):
-    """
-    Add value to hll HyperLogLog and prints every 100000 count
-    """
-    hll.add(value)
-    if not hll.count % 100000:
-        log.debug(f"Count: {hll.count}, "
-                  f"current value: {value}, "
-                  f"cardinality: {len(hll)}")
-
-
-def fill_hll(hll: HyperLogLogEventCounter, max_count, size):
-    [
-        add_print100000(
-            hll, "".join([
-                ascii_letters[randint(0,
-                                      len(ascii_letters) - 1)]
-                for n in range(size)
-            ])) for m in range(max_count)
-    ]
-
-
 if __name__ == "__main__":
     log.basicConfig(format="%(asctime)s %(levelname)s"
                     " [%(module)s/%(funcName)s]"
