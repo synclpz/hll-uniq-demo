@@ -11,26 +11,34 @@ class HyperLogLogEventCounter(HyperLogLog):
     HyperLogLog cardinality counter with event counter
     """
 
-    __slots__ = HyperLogLog.__slots__ + ("count", "name")
+    __slots__ = ("count", "name")
 
     def __init__(self, error_rate, name):
         """
         Create a HyperLogLog with event counter
 
-         Keyword arguments:
+        Keyword arguments:
         error_rate -- desired maximum error rate
         name -- object name for reference
         """
         self.count = 0
         self.name = name
-        super(HyperLogLogEventCounter, self).__init__(error_rate)
+        super().__init__(error_rate)
+
+    def __getstate__(self):
+        return dict([x, getattr(self, x)]
+                    for x in self.__slots__ + super().__slots__)
+
+    def __setstate__(self, d):
+        for key in d:
+            setattr(self, key, d[key])
 
     def add(self, value):
         """
         Add the item to the HyperLogLog and count event
         """
         self.count += 1
-        return super(HyperLogLogEventCounter, self).add(value)
+        return super().add(value)
 
 
 def add_print100000(hll: HyperLogLogEventCounter, value):
