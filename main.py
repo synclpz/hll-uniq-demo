@@ -7,6 +7,9 @@ class HyperLogLogEventCounter(HyperLogLog):
     """
     HyperLogLog cardinality counter with event counter
     """
+
+    __slots__ = HyperLogLog.__slots__ + ("count", "name")
+
     def __init__(self, error_rate, name):
         """
         Create a HyperLogLog with event counter
